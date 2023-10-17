@@ -13,6 +13,7 @@ import Cookie from "cookie-universal";
 import Loading from '../Website/Loading'
 
 const TopBar = () => {
+  console.log("muhammad")
   const dispatch = useDispatch()
   const { isOpen } = useSelector(state => state.MenuSlice)
   const { loading } = useSelector(state => state.userSlice)
