@@ -3,7 +3,7 @@ import { USERS,BaseURL } from "../Api/Api";
 import axios from "axios";
 
 import { Axios } from "../Api/axisos";
-const initialState = {users:[],loading:false,error:false,}
+const initialState = {users:[],user:null,loading:false,error:false,}
 
 export const getAllUsers =createAsyncThunk("users/getAllUsers",async(token,thunkAPI)=>{
     const {rejectWithValue}=thunkAPI
@@ -92,7 +92,7 @@ const userSlice = createSlice({
         .addCase(getUser.fulfilled,(state,action)=>{
             state.loading = false
             state.error=null
-            
+            state.user=action.payload
             
         })
         .addCase(getUser.rejected,(state,action)=>{

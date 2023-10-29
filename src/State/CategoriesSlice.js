@@ -2,6 +2,9 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Axios } from "../Api/axisos";
 import { BaseURL } from "../Api/Api";
 import axios from "axios";
+import Cookie from "cookie-universal";
+const cookie = Cookie()
+export const token = cookie.get("e-commerce")
 const initialState={categories:[],loading:false,error:null}
 
 export const getCategories= createAsyncThunk("categories/getCategories",async(token,thunkAPI)=>{
@@ -27,7 +30,10 @@ export const addCategory= createAsyncThunk("categories/addCategory",async(data,t
 export const getCategory= createAsyncThunk("categories/getCategory",async(id,thunkAPI)=>{
     const {rejectWithValue}=thunkAPI
     try {
-        const res = await Axios.get(`category/${id}`)
+        // const res = await Axios.get(`category/${id}`)
+        const res =await axios.get(`${BaseURL}/category/${id}`,{
+            headers:{Authorization:`Bearer ${token}`}
+        })
         return res.data
     } catch (error) {
         return rejectWithValue(error)

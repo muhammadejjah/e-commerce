@@ -5,15 +5,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { getCategories } from '../../State/CategoriesSlice';
-import {token} from "../../Api/Token"
 import { addproduct } from '../../State/ProductsSlice';
+import Cookie from "cookie-universal";
 const AddProduct = () => {
+    const cookie = Cookie()
+    const token = cookie.get("e-commerce")
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    
     const { loading, } = useSelector(state => state.CategoriesSlice)
     const [category, setCategory] = useState([])
     const [err, setErr] = useState(null)
+
+
     const [form, setForm] = useState({
         category: "Select Category",
         title: "",
@@ -22,29 +25,42 @@ const AddProduct = () => {
         discount: "",
         About: ""
     })
-    
+
     useEffect(() => {
-        dispatch(getCategories(token)).then(result => {
-            setCategory(result.payload)
+        dispatch(getCategories(token)).unwrap().then(result => {
+            setCategory(result)
         })
     }, [])
+
+
     const [images, setimages] = useState([])
+    
+    
     const hadelSubmite = (e) => {
         e.preventDefault();
-        const newProduct = new FormData()
-        // newCategory.append("title", form.title)
-        newProduct.append("title", form.title)
-        newProduct.append("description", form.description)
-        newProduct.append("price", form.price)
-        newProduct.append("discount", form.discount)
-        newProduct.append("About", form.About)
-        newProduct.append("category", form.category)
-        console.log(form)
-        dispatch(addproduct(form)).then((result) => {
-            if (result.type === "products/addproduct/fulfilled") {
+        const data = new FormData()
+        // data.append("category",form.category)
+        // data.append("About", form.About)
+        // data.append("title", form.title)
+        // data.append("description", form.description)
+        // data.append("price", form.price)
+        // data.append("discount", form.discount)
+        for(const key in form){
+            data.append(key, form[key])
+        }
+        for (let index = 0; index < images.length; index++) {
+            data.append("images[]", images[index])
+            
+        }
+        dispatch(addproduct(data)).then((result) => {
+            console.log(result)
+            if (result.type === "/products/addProduct/fulfilled") {
                 navigate("/dashboard/products")
-            } else {
-                setErr("Error")
+            } else if (result.payload.response.status===422) {
+                console.log(form)
+                setErr("there are wrong field")
+            }else{
+                setErr("error from server")
             }
         })
     }
@@ -52,10 +68,11 @@ const AddProduct = () => {
         e.preventDefault();
         setForm({ ...form, [e.target.name]: e.target.value })
     }
+
+    
     const categoriesSelect = category.map((el, idx) => {
-        return <option  key={idx} value={el.title}>{el.title}</option>
+        return <option key={idx} value={el.id}>{el.title}</option>
     })
-    // console.log(form)
     return (
         <div className=' container '>
             <Form className='mt-3' onSubmit={(e) => { hadelSubmite(e) }}>
@@ -67,7 +84,7 @@ const AddProduct = () => {
                             value={form.category}
                             onChange={handleChange}
                             required >
-                            <option  disabled>Select Category</option>
+                            <option disabled>Select Category</option>
                             {categoriesSelect}
                         </Form.Select>
                     </Form.Group>
@@ -121,9 +138,8 @@ const AddProduct = () => {
                         type="file"
                         placeholder="about"
                         multiple
-                        
-                        onChange={(e)=>{setimages(e.target.files)}}
-                         />
+                        onChange={(e) => { setimages(e.target.files) }}
+                    />
                 </Form.Group>
                 <Loading loading={loading}>
                     <Button className='mt-3' variant="primary" type="submit">

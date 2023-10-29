@@ -42,9 +42,9 @@ const SideBar = () => {
         height: "100vh",
         display: windowSize < 768 && isOpen ? "block" : "none"
       }}
-        onClick={openHandler}>
+        onClick={()=>openHandler()}>
       </div>
-      <div className='side-bar shadow d-flex flex-column align-items-center '
+      <div className={['side-bar shadow d-flex flex-column align-items-center', isOpen ? 'active': ''].join(' ')}
         style={{
           width: isOpen ? "250px" : "fit-content",
           left: windowSize < 768 ? isOpen ? "0" : "-100%" : 0,

@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom'
 const HomePage = () => {
   const cookie = Cookie()
   const token = cookie.get("e-commerce")
+  const date = new Date()
+  console.log( Date())
   return (
     <div>
       {token ?<LogOut />:<Link to={"/login"}>login</Link>}

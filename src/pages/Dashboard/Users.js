@@ -15,7 +15,7 @@ const Users = () => {
   const token = cookie.get("e-commerce")
   useEffect(() => {
     dispatch(getAllUsers(token)).then((result) => {
-      if (result.payload != 403) {
+      if (result.payload !== 403) {
         setUsersa(usersa)
       } else {
         setErr("Error")
@@ -70,8 +70,6 @@ const Users = () => {
     },
 
   ]
-
-
   return (
     <Fragment>
       <div style={{ width: "100%" }} className=' overflow-hidden container mt-3'>

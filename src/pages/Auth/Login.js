@@ -28,18 +28,18 @@ const Login = () => {
     },[])
     //handle submit
     const cookie = Cookie()
-    const handleSubmit = async (e) => {
+    const handleSubmit =  (e) => {
         e.preventDefault();
-        dispatch(login(form)).then((user) => {
-            // console.log(user)
+        dispatch(login(form)).then((result) => {
+            const user = result.payload.user
             if (cookie.get("e-commerce")) {
-                if (user.user.role === "1995") {
+                if (user.role === "1995") {
                     navigate("/dashboard/users")
-                } else if (user.user.role === "1996") {
+                } else if (user.role === "1996") {
                     navigate("/dashboard/writer")
-                } else if (user.user.role === "2001") {
+                } else if (user.role === "2001") {
                     navigate("/")
-                } else if (user.user.role === "1999") {
+                } else if (user.role === "1999") {
                     navigate("/dashboard/categories")
                 }
             }

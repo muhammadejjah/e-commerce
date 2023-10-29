@@ -14,7 +14,6 @@ const Products = () => {
   const [err, setErr] = React.useState(null)
   const cookie = Cookie()
   const token = cookie.get("e-commerce")
-  console.log(products)
   useEffect(() => {
     dispatch(getProducts(token))
   }, [])

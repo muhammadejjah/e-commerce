@@ -14,7 +14,8 @@ import {Image} from "lightbox.js-react"
 import { deleteProduct } from '../../State/ProductsSlice'
 
 const TableShow = ({ header, data, currentUser, type, loading }) => {
-    const cu = currentUser || false;
+    
+    // const cu = currentUser || false;
     const dispatch = useDispatch()  
     const [clicked, setClicked] = useState(null) 
     const deleteHandler = async (id) => {
@@ -50,7 +51,7 @@ const TableShow = ({ header, data, currentUser, type, loading }) => {
                 </td>
             )}
             <td className='d-flex align-items-center justify-content-center gap-3'>
-                {item.id === cu.id ? "" :
+                {item.id === currentUser.id ? "" :
                     loading && item.id === clicked ? "Loading.." : <FontAwesomeIcon
                         cursor="pointer"
                         color='red'
@@ -59,7 +60,7 @@ const TableShow = ({ header, data, currentUser, type, loading }) => {
                         onClick={() => { deleteHandler(item.id) }}
                     />
                 }
-                {cu && item.id === cu.id ? "(you)" : <Link to={`${item.id}`} ><FontAwesomeIcon size='xl' icon={faPenToSquare} /></Link>}
+                {currentUser && item.id === currentUser.id ? "(you)" : <Link to={`${item.id}`} ><FontAwesomeIcon size='xl' icon={faPenToSquare} /></Link>}
             </td>
         </tr>
     })
@@ -81,5 +82,5 @@ const TableShow = ({ header, data, currentUser, type, loading }) => {
         </Fragment>
     )
 }
-
+TableShow.defaultProps={currentUser:false}
 export default TableShow

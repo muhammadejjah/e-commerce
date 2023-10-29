@@ -4,18 +4,20 @@ import Loading from "../../components/Website/Loading"
 import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux/es/hooks/useSelector'
-
 import TableShow from '../../components/Dashboard/Table'
 import { getCategories } from '../../State/CategoriesSlice'
 import { Link } from 'react-router-dom'
-import { token } from '../../Api/Token'
+import Cookie from "cookie-universal";
+
 const Categories = () => {
+  const cookie = Cookie()
+  const token = cookie.get("e-commerce")
   const dispatch = useDispatch()
   const { categories, loading, error } = useSelector(state => state.CategoriesSlice)
   const [err, setErr] = React.useState(null)
   useEffect(() => {
     dispatch(getCategories(token))
-  }, [])
+  }, [dispatch])
   const header = [
     {
       name: "title",
